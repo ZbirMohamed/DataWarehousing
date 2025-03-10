@@ -1,0 +1,52 @@
+services:
+
+  bronze:
+    container_name: db-bronze
+    image: postgres:14-alpine
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: ${BRONZE_USER}
+      POSTGRES_PASSWORD: ${BRONZE_PASSWORD}
+      POSTGRES_DB: ${BRONZE_DB}
+    volumes:
+      - bronze:/var/lib/postgresql/data
+
+  silver:
+    container_name: db-silver
+    image: postgres:14-alpine
+    ports:
+      - "5433:5432"
+    env_file:
+      - .env
+    restart: always
+    environment:
+      POSTGRES_USER: ${SILVER_USER}
+      POSTGRES_PASSWORD: ${SILVER_PASSWORD}
+      POSTGRES_DB: ${SILVER_DB}
+    volumes:
+      - silver:/var/lib/postgresql/data
+
+  gold:
+    container_name: db-gold
+    image: postgres:14-alpine
+    ports:
+      - "5434:5432"
+    env_file:
+      - .env
+    restart: always
+    environment:
+      POSTGRES_USER: ${GOLD_USER}
+      POSTGRES_PASSWORD: ${GOLD_PASSWORD}
+      POSTGRES_DB: ${GOLD_DB}
+    volumes:
+      - gold:/var/lib/postgresql/data
+
+
+volumes:
+  bronze:
+  silver:
+  gold:
